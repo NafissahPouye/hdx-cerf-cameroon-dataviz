@@ -1,0 +1,116 @@
+.dc-chart g.row text {
+    fill: black;
+    font-size:0.8em;
+}
+
+.dc-chart .pie-slice {
+    fill:black;
+}
+
+.x-axis-label{
+    font-size:0.8em;
+}
+
+
+#Map{
+    height:300px;
+    width:300px;
+    margin-left: 15px;
+    /*margin-right: 100px;*/
+   /* padding-left: 100px;*/
+}
+
+#header{
+    /*padding-bottom:20px;*/
+    border-bottom-color: #dddddd;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    margin-bottom:5px;
+}
+
+#footer{
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top-color: #dddddd;
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+.removepadding {
+    padding-right:0px;
+    padding-left:0px;
+}
+
+ .hdx-3w-chart {
+    width:100%;
+ }
+
+ .hdx-3w-info{
+    padding:5px;
+    background-color:white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+ }
+
+ #dataTable1 {
+    /*margin-left: 30px;*/
+    margin-left: 0px;
+    border: 1px;
+}
+
+#dataTable2 {
+    /*margin-left: 30px;*/
+   /* padding-right: 10px;*/
+    border: 1px;
+    padding-left: 0px;
+
+}
+.dc-table-column {
+    font-size:0.80em;
+    color: #000000;
+    padding:5;
+ }
+
+ /*.dc-table-label {
+    background-color:#cccccc;
+    height: 1px;
+
+
+ }*/
+  .dc-chart tbody td.dc-table-label {
+    color: transparent;
+    padding: 0px;
+    line-height: 0px;
+    /*margin: */
+
+  }
+/* .dc-chart tbody tr.dc-table-group td {
+    color: transparent;
+    color: #999999;
+    height: 1px;
+
+ }*/
+ #dataTable1 th{
+  font-size:0.2em;
+  color:  #FEFEFE;
+}
+*/
+ #dataTab1 {
+    overflow-y: auto;
+    height: 400px;
+}
+
+.table.table-condensed thead tr th {
+    font-size: 14px;
+    color: #7F7F7;
+}
+
+.table.table-condensed tr td {
+    font-size: 16px;
+    color: #999999;
+}
+    
+#reset {
+  float:right;
+  margin-bottom: 10px;
+}
