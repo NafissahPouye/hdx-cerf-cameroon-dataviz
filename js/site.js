@@ -1,5 +1,4 @@
 function generateringComponent(vardata, vargeodata){
-
   var lookup = genLookup(vargeodata) ;
   var cmrMap = dc.leafletChoroplethChart('#Map');
   var ue_trend = dc.compositeChart('#sector');
@@ -32,7 +31,7 @@ var colors = ['#FAE61E','#03a9f4','#E67800','#C80000','#E6E6FA', '#023858', '#a6
   
 var dateDimension = cf.dimension(function (d) { return d.date;});
 var allocationGroup1 = cf.dimension(function(d) {return d.allocation ==="RR"});
-var allocationGroup2 = cf.dimension(function(d) {return d.allocation ==="UFE"});
+var allocationGroup2 = cf.dimension(function(d) {return d.allocation !=="RR"});
 var groupApproved_ufe = dateDimension.group().reduceSum(function (d){
  if (d.allocation !="RR")  return d.approved/1000000; else {return 0;}} );
 
@@ -47,6 +46,16 @@ function remove_values(groupApproved_ufe) {
   };
 }
 var appGroup = remove_values(groupApproved_ufe);
+function snap_to_zero(appGroup) {
+    return {
+        all:function () {
+            return appGroup.all().map(function(d) {
+                return {key: d.key, 
+                        value: (Math.abs(d.value)<1e-6) ? 0 : d.value};
+            });
+        }
+    };
+}
 
 var groupApproved_rr = dateDimension.group().reduceSum(function (d){ if (d.allocation!="UFE") return d.approved/1000000; else {return 0;}});
 function remove_value(groupApproved_rr) { 
@@ -59,7 +68,18 @@ function remove_value(groupApproved_rr) {
     }
   };
 }
+
 var appGroup2 = remove_value(groupApproved_rr);
+function snap_to_zero(appGroup2) {
+    return {
+        all:function () {
+            return appGroup2.all().map(function(d) {
+                return {key: d.key, 
+                        value: (Math.abs(d.value)<1e-6) ? 0 : d.value};
+            });
+        }
+    };
+}
 
   var sectorDimension = cf.dimension(function (d){return d.sector});
   var sectorGroup = sectorDimension.group();
@@ -82,19 +102,20 @@ var appGroup2 = remove_value(groupApproved_rr);
                 .x(d3.time.scale().domain([new Date(2008, 0, 1), new Date(2017, 11, 31)]))
                 //.round(d3.time.month.round)
                 //.xUnits(d3.time.months)
-                .elasticY(true)
+                .elasticY(false)
                // .renderHorizontalGridLines(true)
                 .legend(dc.legend().x(80).y(10).itemHeight(13).gap(5))
                 .brushOn(false)
                 .compose([
                     dc.lineChart(ue_trend)
-                            .group(appGroup, "UFE")
+                            .group(snap_to_zero(appGroup), "UFE")
                             .title(function (d) {return [' Date de déboursement : '+  dateFormatPretty(d.key),  "Financement UFE: " + numberFormat(d.value) + ' Million US $'].join('\n'); })
                             /*.valueAccessor(function (d) {
                                 return d.value.avg;
                             })*/,
                  dc.lineChart(ue_trend)
-                    .group(appGroup2, "RR")
+                    .group(snap_to_zero(appGroup2),"RR")
+
                     .title(function (d) { return [' Date de déboursement : '+dateFormatPretty(d.key),  "Financement RR: " + numberFormat(d.value) + ' Million US $'].join('\n'); })
                             /*.valueAccessor(function (d) {
                                 return d.value.avg;
@@ -111,7 +132,8 @@ var appGroup2 = remove_value(groupApproved_rr);
                 .yAxisLabel("Financement UFE")
                 .rightYAxisLabel("Financement RR")
                 .renderHorizontalGridLines(true);
-    ue_trend.yAxis().tickFormat(d3.format(',2f'));
+    ue_trend.yAxis().tickFormat(d3.format(',3s'));
+
 //sector rowChart
 whoChart.width(500).height(300)
             .dimension(sectorDimension)
@@ -156,8 +178,8 @@ dc.dataCount('#count-info')
              .height(400)
              .dimension(mapDimension)
              .group(mapGroup)
-             .label(function (p) { return p.key; })
-             .renderTitle(true)
+             //.label(function (p) { return p.key; })
+//.renderTitle(true)
              .center([0,0])
              .zoom(0)
              .geojson(vargeodata)
@@ -176,10 +198,10 @@ dc.dataCount('#count-info')
 
                .featureKeyAccessor(function (feature){
                return feature.properties['rowcacode1'];
-             }).popup(function (d){
+             })/*.popup(function (d){
                return d.properties['ADM1_NAME'];
-             })
-             .renderPopup(true)
+             })*/
+            // .renderPopup(true)
              .featureOptions({
                 'fillColor': 'gray',
                 'color': 'gray',
